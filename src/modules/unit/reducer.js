@@ -2,7 +2,7 @@ import {keys} from 'lodash';
 import {combineReducers} from 'redux';
 import {handleActions} from 'redux-actions';
 import {UnitActions, QualityEnum} from './constants';
-import {IceSkatingServices, SkiingServices} from '../service/constants';
+import {IceSkatingServices, SkiingServices, SwimmingServices} from '../service/constants';
 import {getUnitQuality, enumerableQuality} from './helpers';
 import {EntityAction} from '../common/constants';
 
@@ -33,6 +33,11 @@ const iceskate = handleActions({
     [...keys(entities.unit).filter((id) => entities.unit[id].services.some((unitService) => IceSkatingServices.indexOf(unitService) !== -1))]
 }, []);
 
+const swim = handleActions({
+  [UnitActions.RECEIVE]: (state: Object, {payload: {entities}}: EntityAction) =>
+    [...keys(entities.unit).filter((id) => entities.unit[id].services.some((unitService) => SwimmingServices.indexOf(unitService) !== -1))]
+}, []);
+
 const ski = handleActions({
   [UnitActions.RECEIVE]: (state: Object, {payload: {entities}}: EntityAction) =>
     [...keys(entities.unit).filter((id) => entities.unit[id].services.some((unitService) => SkiingServices.indexOf(unitService) !== -1))]
@@ -50,6 +55,7 @@ const reducer = combineReducers({
   all,
   iceskate,
   ski,
+  swim,
   status_ok: statusOk
 });
 

@@ -32,6 +32,7 @@
       "STATUS_ALL": "Kaikenkuntoiset",
       "ICE_SKATING": "Luistelu",
       "SKIING": "Hiihto",
+      "SWIMMING": "Uinti",
       "STATUS_OK": "Käyttökuntoiset"
     },
     "SORT": {

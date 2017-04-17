@@ -8,7 +8,7 @@ export const UNIT_ICON_WIDTH = 32;
 export const UnitFilters = {
   SKIING: 'ski',
   ICE_SKATING: 'iceskate',
-  //SWIMMING: 'swim',
+  SWIMMING: 'swim',
   STATUS_OK: 'status_ok',
   STATUS_ALL: 'status_all'
 };
@@ -20,8 +20,8 @@ export const StatusFilters = [
 
 export const SportFilters = [
   UnitFilters.SKIING,
-  UnitFilters.ICE_SKATING
-  //UnitFilters.SWIMMING
+  UnitFilters.ICE_SKATING,
+  UnitFilters.SWIMMING
 ];
 
 export const SortKeys = {

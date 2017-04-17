@@ -145,7 +145,11 @@ export class SingleUnitModalContainer extends Component {
   render(){
     const {handleClick, isLoading, unit: currentUnit, services, t} = this.props;
     const {getActiveLanguage} = this.context;
-
+    let temperature = null;
+    if (currentUnit) {
+      temperature = currentUnit.observations.find((o) => { return o.property == 'swimming_water_temperature'; });
+    }
+    if (temperature) { temperature = temperature.name.fi; };
     return (
       <div>
         <Modal className="single-unit-modal" show={this.props.isOpen} backdrop={false} animation={false}>
@@ -153,6 +157,7 @@ export class SingleUnitModalContainer extends Component {
           {currentUnit && !isLoading ?
             <Modal.Body>
               <LocationState unit={currentUnit} t={t}/>
+              <div className='modal-body-box'>Lämpötila {temperature}</div>
               <NoticeInfo unit={currentUnit} t={t} activeLang={getActiveLanguage}/>
               {this.shouldShowInfo(currentUnit) && <LocationInfo unit={currentUnit} t={t} activeLang={getActiveLanguage}/>}
               {getOpeningHours(currentUnit) && <LocationOpeningHours unit={currentUnit} t={t} activeLang={getActiveLanguage}/>}

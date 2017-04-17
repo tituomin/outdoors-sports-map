@@ -65,9 +65,9 @@ export const getUnitSport = (unit: Object) => {
   return 'unknown';
 };
 
-export const getObservation = (unit: Object, matchProperty: ?string='condition') => {
+export const getObservation = (unit: Object, matchProperty: ?string='algae') => {
+  // TODO hardcoded algae !!
   const {observations} = unit;
-
   return observations ? observations.find((obs) => obs.property.includes(matchProperty)) : null;
 };
 

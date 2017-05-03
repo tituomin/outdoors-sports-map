@@ -1,7 +1,7 @@
 //@flow
 import {has, keys, sortBy} from 'lodash';
 import {createRequest, createUrl} from '../api/helpers.js';
-import {UnitServices, IceSkatingServices, SkiingServices/*, SwimmingServices*/} from '../service/constants';
+import {UnitServices, IceSkatingServices, SkiingServices, SwimmingServices} from '../service/constants';
 import {UNIT_PIN_HEIGHT, UNIT_HANDLE_HEIGHT, UnitQuality, UnitFilters, QualityEnum} from './constants';
 import {DEFAULT_LANG} from '../common/constants';
 import upperFirst from 'lodash/upperFirst';
@@ -14,7 +14,7 @@ export const getFetchUnitsRequest = (params: Object)  => {
     include: 'observations,connections',
     geometry: 'true',
     page_size: 1000,
-    ...params
+    ...params,
   }));
 };
 
@@ -53,9 +53,9 @@ export const getUnitSport = (unit: Object) => {
       return UnitFilters.SKIING;
     }
 
-    // if (SwimmingServices.includes(service.id)) {
-    //   return UnitFilters.SWIMMING;
-    // }
+    if (SwimmingServices.includes(service)) {
+      return UnitFilters.SWIMMING;
+    }
   }
 
   return 'unknown';
@@ -68,14 +68,23 @@ export const getObservation = (unit: Object, matchProperty: ?string='condition')
 };
 
 export const getUnitQuality = (unit: Object): string => {
-  const observation = getObservation(unit);
+  const ConditionObservationMapping = {
+    [UnitFilters.ICE_SKATING]: 'condition',
+    [UnitFilters.SKIING]: 'condition',
+    [UnitFilters.SWIMMING]: 'algae',
+  };
+
+  const matchCriteria = ConditionObservationMapping[getUnitSport(unit)] || 'condition';
+  const observation = getObservation(unit, matchCriteria);
   return observation ? observation.quality : UnitQuality.UNKNOWN;
 };
 
 export const getOpeningHours = (unit: Object, activeLang: string): string => {
   if(unit.services[0].id == UnitServices.MECHANICALLY_FROZEN_ICE && unit.connections && unit.connections[1]){
-    return getAttr(unit.connections[1].name, activeLang);
-  }};
+    return (getAttr(unit.connections[1].name, activeLang) || '');
+  }
+  return '';
+};
 
 export const enumerableQuality = (quality: string): number => {
   return QualityEnum[quality] ? QualityEnum[quality] : Number.MAX_VALUE;
@@ -104,7 +113,7 @@ export const getUnitIcon = (unit: Object, selected: ?boolean = false) => (
   {
     url: getUnitIconURL(unit, selected, false),
     retinaUrl: getUnitIconURL(unit, selected, true),
-    height: getUnitIconHeight(unit)
+    height: getUnitIconHeight(unit),
   }
 );
 
@@ -132,7 +141,7 @@ export const sortByCondition = (units: Array) =>
         observation && observation.time && (new Date(observation.time)).getTime() || 0;
 
       return (new Date()).getTime() - observationTime;
-    }
+    },
   ]);
 
 export const getAddressToDisplay = (address, activeLang) => {

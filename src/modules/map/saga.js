@@ -12,7 +12,7 @@ function* onSetLocation({payload: position}: FetchAction) {
   const addressParams = {
     lat: position[0],
     lon: position[1],
-    page_size: 1
+    page_size: 1,
   };
   const addressRequest = createRequest(createUrl('address/', addressParams));
   const {bodyAsJson: addressJson} = yield call(callApi, addressRequest);
@@ -21,7 +21,7 @@ function* onSetLocation({payload: position}: FetchAction) {
 
   const unitParams = {
     lat: position[0],
-    lon: position[1]
+    lon: position[1],
   };
 
   const unitRequest = getFetchUnitsRequest(unitParams);
@@ -41,6 +41,6 @@ function* watchSetLocation() {
 
 export default function* saga() {
   return [
-    yield fork(watchSetLocation)
+    yield fork(watchSetLocation),
   ];
 }

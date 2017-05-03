@@ -12,12 +12,27 @@ function* onSetLocation({payload: position}: FetchAction) {
   const addressParams = {
     lat: position[0],
     lon: position[1],
-    page_size: 1
+    page_size: 1,
   };
   const addressRequest = createRequest(createUrl('address/', addressParams));
   const {bodyAsJson: addressJson} = yield call(callApi, addressRequest);
   const addressData = addressJson.results ? addressJson.results[0] : null;
   yield put(receiveAddress(addressData));
+
+  const unitParams = {
+    lat: position[0],
+    lon: position[1],
+  };
+
+  const unitRequest = getFetchUnitsRequest(unitParams);
+  const {response, bodyAsJson: unitJson} = yield call(callApi, unitRequest);
+
+  if(response.status === 200) {
+    const data = normalizeEntityResults(unitJson.results, arrayOf(unitSchema));
+    yield put(receiveUnits(data));
+  } else {
+    yield put(setFetchError(unitJson.results));
+  }
 }
 
 function* watchSetLocation() {
@@ -26,6 +41,6 @@ function* watchSetLocation() {
 
 export default function* saga() {
   return [
-    yield fork(watchSetLocation)
+    yield fork(watchSetLocation),
   ];
 }

@@ -25,17 +25,22 @@ export class HomeContainer extends Component {
   static propTypes = {
     fetchUnits: PropTypes.func.isRequired,
     position: PropTypes.array.isRequired,
-    unitData: PropTypes.array
+    unitData: PropTypes.array,
   };
 
   static defaultProps = {
     unitData: [],
-    position: locations.HELSINKI
+    position: locations.HELSINKI,
   };
 
   constructor(props) {
     super(props);
     this.leafletMap = null;
+    this.state = {
+      selectedView: props.selectedView,
+    };
+
+    this.state = {modalOpen: false};
 
     this.openUnit = this.openUnit.bind(this);
     this.closeUnit = this.closeUnit.bind(this);
@@ -48,7 +53,7 @@ export class HomeContainer extends Component {
 
   getChildContext() {
     return {
-      getActiveLanguage: this.getActiveLanguage
+      getActiveLanguage: this.getActiveLanguage,
     };
   }
 
@@ -77,7 +82,7 @@ export class HomeContainer extends Component {
   fetchUnits() {
     this.props.fetchUnits({
       lat: this.props.position[0],
-      lon: this.props.position[1]
+      lon: this.props.position[1],
     });
   }
 
@@ -112,7 +117,7 @@ export class HomeContainer extends Component {
     const {router, location: {query}} = this.props;
     router.push({
       pathname: `/unit/${unitId}`,
-      query
+      query,
     });
   }
 
@@ -120,7 +125,7 @@ export class HomeContainer extends Component {
     const {router, location: {query}} = this.props;
     router.push({
       pathname: '/',
-      query
+      query,
     });
   }
 
@@ -169,7 +174,7 @@ export class HomeContainer extends Component {
 }
 
 HomeContainer.childContextTypes = {
-  getActiveLanguage: React.PropTypes.func
+  getActiveLanguage: React.PropTypes.func,
 };
 
 const mapStateToProps = (state, props) => ({
@@ -181,7 +186,7 @@ const mapStateToProps = (state, props) => ({
   mapCenter: fromMap.getLocation(state),
   position: fromMap.getLocation(state),
   address: fromMap.getAddress(state),
-  isSearching: fromSearch.getIsFetching(state)
+  isSearching: fromSearch.getIsFetching(state),
 });
 
 const mapDispatchToProps = (dispatch) =>

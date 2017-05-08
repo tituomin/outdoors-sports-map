@@ -71,6 +71,11 @@ export const getObservation = (unit: Object) => {
   return observations ? observations.find((obs) => obs.primary) : null;
 };
 
+export const getNotice = (unit: Object) => {
+  const {observations} = unit;
+  return observations ? observations.find((obs) => obs.property === 'notice') : null;
+};
+
 export const getUnitQuality = (unit: Object): string => {
   const observation = getObservation(unit);
   return observation ? observation.quality : UnitQuality.UNKNOWN;

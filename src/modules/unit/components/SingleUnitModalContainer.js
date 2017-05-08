@@ -7,6 +7,7 @@ import {
   getAttr,
   getObservation,
   getOpeningHours,
+  getNotice,
   getObservationTime
 } from '../helpers';
 import {getServiceName} from '../../service/helpers';
@@ -79,7 +80,7 @@ const LocationInfo = ({unit, t, activeLang}) =>
  * @param {Function} activeLang [description]
  */
 const NoticeInfo = ({unit, t, activeLang}) => {
-  const notice = getObservation(unit, 'notice');
+  const notice = getNotice(unit);
   return ( notice ?
   <ModalBodyBox title={t('MODAL.NOTICE')}>
     <StatusUpdated time={getObservationTime(notice)} t={t}/>
